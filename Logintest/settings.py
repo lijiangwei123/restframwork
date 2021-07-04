@@ -126,3 +126,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+REST_FRAMEWORK = {
+    # 全局使用的认证类
+    'DEFAULT_AUTHENTICATION_CLASSES': ('order.utils.auth.MyAuthentication', ),
+    # 匿名用户
+    'UNAUTHENTICATED_USER': lambda :"匿名用户",
+    #  全局使用peimission类
+    'DEFAULT_PERMISSION_CLASSES': ('order.utils.permission.MyPermission', ),
+    # 全局使用throttle类
+    'DEFAULT_THROTTLE_CLASSES': ("order.utils.throttle.Visit", ),
+}

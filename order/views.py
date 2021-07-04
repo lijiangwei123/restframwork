@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views import View
@@ -11,8 +11,9 @@ import json
 
 # Create your views here.
 
+
 @method_decorator(csrf_exempt, name = 'dispatch')
-class OrderView(View):
+class OrderView(APIView):
     def get(self, request, *args, **kwargs):
         return HttpResponse('获取订单')
 
@@ -25,32 +26,30 @@ class OrderView(View):
     def delete(self, request, *args, **kwargs):
         return HttpResponse('删除订单')
 
-class MyAuthentication:
-    def authenticate(self, request):
-        token = request._request.GET.get('token')
-        if not token:
-            raise exceptions.AuthenticationFailed('用户认证失败')
-        return ('alex', None)
-
-    def authenticate_header(self, val):
-        pass
-
 
 class DogView(APIView):
-    authentication_classes = [MyAuthentication,]
+    permission_classes = []
+    authentication_classes = []
     def get(self, request, *args, **kwargs):
         self.dispatch()
+        print(request.user)
         ret = {
             'code': 1,
             'msg': '操作成功'
         }
-        return HttpResponse(json.dumps(ret))
+        return JsonResponse(ret)
 
     def post(self, request, *args, **kwargs):
-        return HttpResponse('创建订单')
+        ret1 = {
+            'code': 1,
+            'msg': '创建订单'
+        }
+        return JsonResponse(ret1)
 
     def put(self, request, *args, **kwargs):
         return HttpResponse('更新订单')
 
     def delete(self, request, *args, **kwargs):
         return HttpResponse('删除订单')
+
+
